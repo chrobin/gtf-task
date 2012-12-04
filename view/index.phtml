@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf8" />
+	<title>Test</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<style type="text/css">
+	.grid-layout {
+		position: relative;
+	}
+	.grid-layout .box {
+		float: left;
+		width: 50%;
+		padding: 0;
+		margin: 0;
+		position: relative;
+	}
+	.grid-layout .box .inner {
+		height: 15em;
+		overflow: auto;
+
+		margin: 0.3em;
+		padding: 10px;
+		border-radius: 4px;
+		border: 1px solid #ccc;
+		transition: 0.5s;
+		-webkit-transition: 0.5s;
+		-khtml-transition: 0.5s;
+		-moz-transition: 0.5s;
+		-o-transition: 0.5s;
+	}
+	.grid-layout .box .inner:hover {
+		box-shadow: 0 0 10px #ccc;
+	}
+	.grid-layout .box .box-btn {
+		position: absolute;
+		bottom: 4px;
+		right: 5px;
+		margin: 0px;
+		opacity: 0;
+		transition: 0.5s;
+		-webkit-transition: 0.5s;
+		-khtml-transition: 0.5s;
+		-moz-transition: 0.5s;
+		-o-transition: 0.5s;
+	}
+	.grid-layout .box:hover .box-btn {
+		opacity: 1;
+	}
+	.task-list h2 {
+		border-bottom: 1px solid lightblue;
+	}
+	.task-list .date {
+		position: absolute;
+		bottom: 5px;
+		left: 5px;
+		padding-left: 5px;
+	}
+	.task-list .progress .bar input {
+		border: 0px;
+		border-bottom: 2px solid black;
+		background: transparent;
+		text-align: center;
+	}
+	</style>
+</head>
+<body class="container">
+	<div class="page-header">
+		<h1>My Task List</h1>
+	</div>
+	<div class="row">
+		<div class="span9">
+			<div class="grid-layout task-list">
+			<?php $this->block('tasks-list'); ?>
+				<?php foreach ($var['tasks-list'] as $row): ?>
+				<div class="box">
+					<div class="inner">
+						<h2 data-editor="text"><?=$row['title']?></h2>
+						<p class="description" data-editor="textarea"><?=$row['description']?></p>
+						<div class="progress progress-info">
+							<div class="bar" style="width:<?=$row['progress']?>%" data-editor="text">
+								<?=$row['progress']?>
+							</div>
+						</div>
+						<div class="date"><?=$row['mod_date']?></div>
+						<div class="btn-group box-btn">
+							<a class="btn btn-mini edit-btn" href="edit_task.php?id=<?=$row['task_id']?>">
+								<i class="icon-edit"></i>
+							</a>
+							<a class="btn btn-mini del-btn" href="del_task.php?id=<?=$row['task_id']?>">
+								<i class="icon-remove"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+				<?php endforeach; ?>
+			<?php $this->end(); ?>
+			</div>
+		</div>
+		<div class="span3">
+			<form action="index.php/addTask" method="POST">
+				<fieldset>
+					<legend>New task~</legend>
+					<p>
+						<input type="text" name="title" placeholder="title" />
+					</p>
+					<p>
+						<textarea name="description" placeholder="description"></textarea>
+					</p>
+					<input type="submit" class="btn btn-primary" value="Submit" />
+					<input type="reset" class="btn" />
+				</fieldset>
+			</form>
+		</div>
+	</div>
+	<div id="alert" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="alert-info" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="alert-info">Modal header</h3>
+		</div>
+		<div class="modal-body">
+			<p>One fine body…</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/jquery.taskbox.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		// TODO add AJAX to edit button.
+		function showMessage(title, body) {
+			$("#alert-info").html(title);
+			$("#alert .modal-body").html(body);
+			$('#alert').modal('show');
+		}
+		function editBtnClick(event) {
+			event.preventDefault();
+			$this = $(this);
+			$task = $this.closest('.inner');
+			toggleEditTask($task);
+		}
+		function submitTask($task) {
+			var url = $('.edit-btn', $task).attr('href');
+			var tokens = url.split(/[\=\?]/);
+			var $progress = $('.progress input');
+			var progress_val = $progress.val()
+			$progress.closest(".bar").css("width", progress_val + "%")
+			var params = {
+				title: $('h2 input', $task).val(),
+				description: $('.description textarea', $task).val(),
+				progress: progress_val,
+				task_id: tokens[2]
+			};
+			$.ajax({
+				url: tokens[0],
+				data: params,
+				type: 'post'
+			}).done(function(data) {
+				toggleEditTask($task);
+				showMessage('Done!', 'You have successfully submit the changes.');
+			}).error(function(data) {
+				alert(data);
+			});
+		}
+		function toggleEditTask($task) {
+			if (! $task.data('edit')) {
+				$task.data('edit', true);
+				$.data($task, 'edit', true);
+
+				$('.edit-btn', $task).off().on('click', function(event) {
+					event.preventDefault();
+					submitTask($task);
+				}).children('i').attr('class', 'icon-ok-circle');
+				$('.del-btn', $task).on('click', function(event) {
+					event.preventDefault();
+					toggleEditTask($task);
+				}).children('i').attr('class', 'icon-ban-circle');
+
+			} else {
+				$task.removeData('edit');
+
+				$('.edit-btn', $task).off().on('click', editBtnClick).children('i').attr('class', 'icon-edit');
+				$('.del-btn', $task).off().children('i').attr('class', 'icon-remove');
+
+			}
+			$("[data-editor='text']", $task).each(function() {
+				$this = $(this);
+				if ($this.data('editing')) {
+					var html = $("input", $this).val();
+					$this.html(html);
+					$this.removeData('editing');
+				} else {
+					var text = $this.html().trim();
+					$this.html("<input type='text' value='" + text + "' />");
+					$this.data('editing', true);
+				}
+			});
+			$("[data-editor='textarea']", $task).each(function() {
+				$this = $(this);
+				if ($this.data('editing')) {
+					var html = $("textarea", $this).val();
+					$this.html(html);
+					$this.removeData('editing');
+				} else {
+					var html = $this.html();
+					$this.html("<textarea>" + html + "</textarea>");
+					$this.data('editing', true);
+				}
+			});
+		}
+		$(".edit-btn").on('click', editBtnClick);
+	});
+	</script>
+</body>
+</html>
