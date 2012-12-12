@@ -85,10 +85,10 @@
 						</div>
 						<div class="date"><?=$row['mod_date']?></div>
 						<div class="btn-group box-btn">
-							<a class="btn btn-mini edit-btn" href="edit_task.php?id=<?=$row['task_id']?>">
+							<a class="btn btn-mini edit-btn" href="index.php/editTask?id=<?=$row['task_id']?>">
 								<i class="icon-edit"></i>
 							</a>
-							<a class="btn btn-mini del-btn" href="del_task.php?id=<?=$row['task_id']?>">
+							<a class="btn btn-mini del-btn" href="index.php/delTask?id=<?=$row['task_id']?>">
 								<i class="icon-remove"></i>
 							</a>
 						</div>
@@ -162,7 +162,7 @@
 				toggleEditTask($task);
 				showMessage('Done!', 'You have successfully submit the changes.');
 			}).error(function(data) {
-				alert(data);
+        console.log(data);
 			});
 		}
 		function toggleEditTask($task) {
