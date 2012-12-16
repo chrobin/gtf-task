@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf8" />
 	<title>My Base Page</title>
+  <link rel="stylesheet" type="text/css" href="<?=$this->resUri('css/error.css')?>" />
 </head>
 <body class="container">
 	<div class="page-header">
@@ -10,7 +11,7 @@
 	</div>
 	<div class="content">
 		<p>The system reported that:</p>
-		<p><?=$var['message']?></p>
+		<p><?=$this->var['message']?></p>
 	</div>
 </body>
 </html>

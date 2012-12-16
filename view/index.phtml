@@ -3,67 +3,9 @@
 <head>
 	<meta charset="utf8" />
 	<title>Test</title>
-	<link rel="stylesheet" href="css/bootstrap.min.css" />
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<style type="text/css">
-	.grid-layout {
-		position: relative;
-	}
-	.grid-layout .box {
-		float: left;
-		width: 50%;
-		padding: 0;
-		margin: 0;
-		position: relative;
-	}
-	.grid-layout .box .inner {
-		height: 15em;
-		overflow: auto;
-
-		margin: 0.3em;
-		padding: 10px;
-		border-radius: 4px;
-		border: 1px solid #ccc;
-		transition: 0.5s;
-		-webkit-transition: 0.5s;
-		-khtml-transition: 0.5s;
-		-moz-transition: 0.5s;
-		-o-transition: 0.5s;
-	}
-	.grid-layout .box .inner:hover {
-		box-shadow: 0 0 10px #ccc;
-	}
-	.grid-layout .box .box-btn {
-		position: absolute;
-		bottom: 4px;
-		right: 5px;
-		margin: 0px;
-		opacity: 0;
-		transition: 0.5s;
-		-webkit-transition: 0.5s;
-		-khtml-transition: 0.5s;
-		-moz-transition: 0.5s;
-		-o-transition: 0.5s;
-	}
-	.grid-layout .box:hover .box-btn {
-		opacity: 1;
-	}
-	.task-list h2 {
-		border-bottom: 1px solid lightblue;
-	}
-	.task-list .date {
-		position: absolute;
-		bottom: 5px;
-		left: 5px;
-		padding-left: 5px;
-	}
-	.task-list .progress .bar input {
-		border: 0px;
-		border-bottom: 2px solid black;
-		background: transparent;
-		text-align: center;
-	}
-	</style>
+	<link rel="stylesheet" href="<?=$this->resUri('css/bootstrap.min.css')?>" />
+  <link rel="stylesheet" href="<?=$this->resUri('css/grid.css')?>" />
+	<script type="text/javascript" src="<?=$this->resUri('js/jquery.min.js')?>"></script>
 </head>
 <body class="container">
 	<div class="page-header">
@@ -126,11 +68,10 @@
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 		</div>
 	</div>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="js/jquery.taskbox.js"></script>
+	<script type="text/javascript" src="<?=$this->resUri('js/bootstrap.min.js')?>"></script>
+	<script type="text/javascript" src="<?=$this->resUri('js/jquery.taskbox.js')?>"></script>
 	<script type="text/javascript">
 	$(function() {
-		// TODO add AJAX to edit button.
 		function showMessage(title, body) {
 			$("#alert-info").html(title);
 			$("#alert .modal-body").html(body);
