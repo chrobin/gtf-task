@@ -1,4 +1,5 @@
 <?php
+namespace gtf;
 
 /**
  * Gtf PDO Box. A connection resource wrapper for PDO connection.
@@ -18,7 +19,7 @@ class PDOBox {
     if (static::$dbh == null) {
       # read configuration from file 'db.config.php'.
       $db = include 'db.config.php';
-      static::$dbh = new PDO($db['dsn'], $db['user'], $db['password']);
+      static::$dbh = new \PDO($db['dsn'], $db['user'], $db['password']);
     }
     return static::$dbh;
   }

@@ -1,4 +1,5 @@
 <?php
+namespace gtf;
 
 /**
  * Gtf Page Template. 
@@ -74,7 +75,7 @@ class Page {
    * @param $file the template file path relative to view folder.
    */
   public function template($file) {
-    $var = $this->var;
+    $var = $this->var; # make the variable name shorter.
     include $file;
     if ($this->templ != null) {
       $templ = $this->templ;

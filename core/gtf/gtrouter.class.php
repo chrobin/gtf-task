@@ -1,5 +1,7 @@
 <?php
 
+namespace gtf;
+
 class GtRouter {
 
   protected static function split_($str) {

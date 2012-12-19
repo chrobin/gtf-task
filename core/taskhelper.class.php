@@ -1,8 +1,10 @@
 <?php
 
+use gtf\PDOBox;
+
 class TaskHelper {
   static function getTaskByID($task_id) {
-	  $sql = 
+$sql =
 <<<SQL
 select * from task where task_id=:task_id
 SQL;
@@ -23,7 +25,7 @@ SQL;
 
   static function getTasks($sql_cond=null, array $param=null) {
     $tasks_list = array();
-    $sql = 
+    $sql =
 <<<SQL
 select * from task $sql_cond
 SQL;
@@ -47,9 +49,9 @@ SQL;
 
       $update_sql =
 <<<SQL
-      update task 
-      set title=:title, description=:description, mod_date=datetime(), progress=:progress
-      where task_id=:task_id
+update task
+set title=:title, description=:description, mod_date=datetime(), progress=:progress
+where task_id=:task_id
 SQL;
       $stat = $dbh->prepare($update_sql);
       $length = $stat->execute($task);
@@ -67,9 +69,9 @@ SQL;
     try {
       $dbh = PDOBox::get();
 
-      $add_sql = 
+      $add_sql =
 <<<SQL
-    insert into task values(null,:title,:description,:author_id,datetime(),datetime(),:progress)
+insert into task values(null,:title,:description,:author_id,datetime(),datetime(),:progress)
 SQL;
       
       $stat = $dbh->prepare($add_sql);
@@ -91,9 +93,9 @@ SQL;
     try {
       $dbh = PDOBox::get();
 
-      $del_sql = 
+      $del_sql =
 <<<SQL
-    delete from task where task_id=:task_id
+delete from task where task_id=:task_id
 SQL;
 
       $stat = $dbh->prepare($del_sql);
